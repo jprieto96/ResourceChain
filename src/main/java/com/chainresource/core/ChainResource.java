@@ -1,4 +1,8 @@
-package org.example;
+package com.chainresource.core;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class ChainResource<T> {
 
@@ -30,7 +34,7 @@ public class ChainResource<T> {
         return storage.read().thenCompose(result -> {
             if (result.isPresent() && !result.get().isExpired()) {
                 // Found valid data, propagate upwards
-                T value = result.get().getValue();
+                T value = result.get().value();
                 propagateUpwards(index - 1, value);
                 return CompletableFuture.completedFuture(value);
             } else {
@@ -41,11 +45,18 @@ public class ChainResource<T> {
     }
 
     private void propagateUpwards(int toIndex, T value) {
+        List<CompletableFuture<Void>> writeFutures = new ArrayList<>();
+
         for (int i = toIndex; i >= 0; i--) {
             Storage<T> storage = storageChain.get(i);
             if (storage.canWrite()) {
-                storage.write(value);
+                writeFutures.add(storage.write(value));
             }
+        }
+
+        // Wait for all writes to complete
+        for (CompletableFuture<Void> completableFuture : writeFutures) {
+            completableFuture.join();
         }
     }
 

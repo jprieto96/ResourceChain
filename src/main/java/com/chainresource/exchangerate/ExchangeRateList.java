@@ -3,7 +3,7 @@ package com.chainresource.exchangerate;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ExchangeRate {
+public class ExchangeRateList {
 
     private String disclaimer;
     private String license;
@@ -11,7 +11,7 @@ public class ExchangeRate {
     private String base;
     private Map<String, Double> rates;
 
-    public ExchangeRate() {
+    public ExchangeRateList() {
         this.rates = new HashMap<>();
     }
 

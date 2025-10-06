@@ -1,8 +1,8 @@
-package com.chainresource.exchangerate.strategies;
+package com.chainresource.exchangerate.factory.strategies;
 
 import com.chainresource.core.ChainResource;
 import com.chainresource.core.Storage;
-import com.chainresource.exchangerate.ExchangeRateChainResourceFactory;
+import com.chainresource.exchangerate.factory.ExchangeRateChainResourceFactory;
 import com.chainresource.exchangerate.ExchangeRateList;
 import com.chainresource.storage.FileSystemStorage;
 import com.chainresource.storage.MemoryStorage;
@@ -15,9 +15,9 @@ import java.util.List;
 
 public class ExchangeRateChainResourceDefaultFactoryStrategy implements ExchangeRateChainResourceFactory {
 
-    String CACHE_FILE = "exchange_rates_cache.json";
+    String CACHE_FILE = "src/main/resources/exchange_rates_cache.json";
 
-    ChainResource<ExchangeRateList> create() {
+    public ChainResource<ExchangeRateList> create() {
         String apiUrl = "https://openexchangerates.org/api/latest.json?app_id=" + Constants.API_KEY;
 
         List<Storage<ExchangeRateList>> chain = Arrays.asList(
