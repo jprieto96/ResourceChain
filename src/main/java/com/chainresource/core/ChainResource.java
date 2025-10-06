@@ -34,7 +34,7 @@ public class ChainResource<T> {
         return storage.read().thenCompose(result -> {
             if (result.isPresent() && !result.get().isExpired()) {
                 // Found valid data, propagate upwards
-                T value = result.get().value();
+                T value = result.get().getValue();
                 propagateUpwards(index - 1, value);
                 return CompletableFuture.completedFuture(value);
             } else {
